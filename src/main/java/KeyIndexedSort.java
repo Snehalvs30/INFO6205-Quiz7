@@ -1,10 +1,10 @@
 public class KeyIndexedSort {
     private static final int R = 256;  // Extended ASCII characters (0-255)
     private static final int CUTOFF = 15;  // Optional insertion sort cutoff
-
+    
     // Non-instantiable class
     public KeyIndexedSort() { }
-
+    
     /**
      * Sorts strings by their d-th character using key-indexed counting sort
      * @param a Array to sort
@@ -13,27 +13,37 @@ public class KeyIndexedSort {
     public static void sortByPosition(String[] a, int d) {
         int n = a.length;
         if (n <= 1) return;
-
         String[] aux = new String[n];
         int[] count = new int[R + 2];  // +2 to handle -1 (end-of-string)
-
-        // Student TODO:
+        
         // 1. Compute frequency counts
-       
+        for (int i = 0; i < n; i++) {
+            int c = charAt(a[i], d) + 1;  // Add 1 to handle -1 case
+            count[c]++;
+        }
+        
         // 2. Transform counts to indices
-       
+        for (int r = 0; r < R + 1; r++) {
+            count[r + 1] += count[r];
+        }
+        
         // 3. Distribute to auxiliary array
+        for (int i = 0; i < n; i++) {
+            int c = charAt(a[i], d) + 1;
+            aux[count[c]++] = a[i];
+        }
         
         // 4. Copy back to original array
-
-
+        for (int i = 0; i < n; i++) {
+            a[i] = aux[i];
+        }
     }
-
+    
     // Get d-th character or -1 if out of bounds
     private static int charAt(String s, int d) {
         return d < s.length() ? s.charAt(d) : -1;
     }
-
+    
     /**
      * Checks if array is sorted by d-th character
      * @param a Array to check
@@ -48,7 +58,7 @@ public class KeyIndexedSort {
         }
         return true;
     }
-
+    
     // Example usage
     public static void main(String[] args) {
         String[] words = {"apple", "banana", "kiwi", "grape", "pear"};
