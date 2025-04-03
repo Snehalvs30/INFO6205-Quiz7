@@ -13,32 +13,33 @@ public class KeyIndexedSort {
     public static void sortByPosition(String[] a, int d) {
     int n = a.length;
     if (n <= 1) return;
+
     String[] aux = new String[n];
-    int[] count = new int[R + 2];  // +2 to handle -1 (end-of-string)
-    
+    int[] count = new int[R + 2]; // +2 to handle -1 (which is treated as 0 index)
+
     // 1. Compute frequency counts
     for (int i = 0; i < n; i++) {
-        int c = charAt(a[i], d) + 2;  // +2 to handle -1 case
-        count[c]++;
+        int c = charAt(a[i], d);
+        count[c + 2]++; // +2 shifts -1 to index 0, 0 to index 1, etc.
     }
-    
+
     // 2. Transform counts to indices
     for (int r = 0; r < R + 1; r++) {
         count[r + 1] += count[r];
     }
-    
+
     // 3. Distribute to auxiliary array
     for (int i = 0; i < n; i++) {
-        int c = charAt(a[i], d) + 2;  // +2 to handle -1 case
-        aux[count[c - 1]] = a[i];
-        count[c - 1]++;
+        int c = charAt(a[i], d);
+        aux[count[c + 1]++] = a[i];
     }
-    
+
     // 4. Copy back to original array
     for (int i = 0; i < n; i++) {
         a[i] = aux[i];
     }
 }
+
     // Get d-th character or -1 if out of bounds
     private static int charAt(String s, int d) {
         return d < s.length() ? s.charAt(d) : -1;
