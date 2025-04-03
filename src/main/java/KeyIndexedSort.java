@@ -15,12 +15,12 @@ public class KeyIndexedSort {
     if (n <= 1) return;
 
     String[] aux = new String[n];
-    int[] count = new int[R + 2]; // +2 to handle -1 (which is treated as 0 index)
+    int[] count = new int[R + 2]; 
 
     // 1. Compute frequency counts
     for (int i = 0; i < n; i++) {
         int c = charAt(a[i], d);
-        count[c + 2]++; // +2 shifts -1 to index 0, 0 to index 1, etc.
+        count[c + 2]++; 
     }
 
     // 2. Transform counts to indices
